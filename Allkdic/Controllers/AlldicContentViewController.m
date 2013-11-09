@@ -13,7 +13,8 @@
 
 - (void)awakeFromNib
 {
-	self.webView.mainFrameURL = @"http://endic.naver.com/popManager.nhn?m=miniPopMain";
+	self.webView.mainFrameURL = @"http://dic.daum.net/index.do?dic=eng";
+//	self.webView.mainFrameURL = @"http://endic.naver.com/popManager.nhn?m=miniPopMain";
 	[self.indicator startAnimation:nil];
 }
 
@@ -45,8 +46,8 @@
 
 - (void)focusOnTextArea
 {
-	[self javascript:@"ac_input.focus()"];
-	[self javascript:@"ac_input.select()"];
+	[self javascript:@"q.focus()"];
+	[self javascript:@"q.select()"];
 }
 
 - (void)handleKeyBinding:(KeyBinding *)keyBinding
@@ -66,22 +67,22 @@
 	// Command + X
 	else if( !keyBinding.shift && !keyBinding.control && !keyBinding.option && keyBinding.command && keyBinding.keyCode == [KeyBinding keyCodeFormKeyString:@"x"] )
 	{
-		NSString *input = [self javascript:@"ac_input.value.slice(ac_input.selectionStart, ac_input.selectionEnd)"];
+		NSString *input = [self javascript:@"q.value.slice(q.selectionStart, q.selectionEnd)"];
 		[[NSPasteboard generalPasteboard] clearContents];
 		[[NSPasteboard generalPasteboard] setString:input forType:NSStringPboardType];
 		NSLog( @"'%@' has been copied.", input );
 		
 		NSMutableString *script = [NSMutableString string];
-		[script appendString:@"var selection = ac_input.selectionStart;"];
-		[script appendString:@"ac_input.value = ac_input.value.substring(0, ac_input.selectionStart) + ac_input.value.substr(ac_input.selectionEnd,  ac_input.value.length - ac_input.selectionEnd);"];
-		[script appendString:@"ac_input.selectionStart = ac_input.selectionEnd = selection;"];
+		[script appendString:@"var selection = q.selectionStart;"];
+		[script appendString:@"q.value = q.value.substring(0, q.selectionStart) + q.value.substr(q.selectionEnd,  q.value.length - q.selectionEnd);"];
+		[script appendString:@"q.selectionStart = q.selectionEnd = selection;"];
 		[self javascript:script];
 	}
 	
 	// Command + C
 	else if( !keyBinding.shift && !keyBinding.control && !keyBinding.option && keyBinding.command && keyBinding.keyCode == [KeyBinding keyCodeFormKeyString:@"c"] )
 	{
-		NSString *input = [self javascript:@"ac_input.value.slice(ac_input.selectionStart, ac_input.selectionEnd)"];
+		NSString *input = [self javascript:@"q.value.slice(q.selectionStart, q.selectionEnd)"];
 		[[NSPasteboard generalPasteboard] clearContents];
 		[[NSPasteboard generalPasteboard] setString:input forType:NSStringPboardType];
 		NSLog( @"'%@' has been copied.", input );
@@ -95,9 +96,9 @@
 		
 		NSMutableString *script = [NSMutableString string];
 		[script appendFormat:@"var input = '%@';", input];
-		[script appendString:@"var selection = ac_input.selectionStart + input.length;"];
-		[script appendString:@"ac_input.value = ac_input.value.substring(0, ac_input.selectionStart) + input + ac_input.value.substr(ac_input.selectionEnd,  ac_input.value.length - ac_input.selectionEnd);"];
-		[script appendString:@"ac_input.selectionStart = ac_input.selectionEnd = selection;"];
+		[script appendString:@"var selection = q.selectionStart + input.length;"];
+		[script appendString:@"q.value = q.value.substring(0, q.selectionStart) + input + q.value.substr(q.selectionEnd,  q.value.length - q.selectionEnd);"];
+		[script appendString:@"q.selectionStart = q.selectionEnd = selection;"];
 		[self javascript:script];
 	}
 }
